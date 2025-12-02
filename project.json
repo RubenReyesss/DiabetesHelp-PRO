@@ -1,0 +1,62 @@
+{
+  "name": "DiabetesHelp PRO",
+  "description": "Professional diabetes management system with AI and medical knowledge base",
+  "version": "1.0.0",
+  "author": {
+    "name": "Rubén Reyes",
+    "github": "RubenReyesss"
+  },
+  "license": "MIT",
+  "keywords": [
+    "diabetes",
+    "healthcare",
+    "ai",
+    "rag",
+    "mistral",
+    "openrouter",
+    "gradio",
+    "medical",
+    "assistant",
+    "personalized",
+    "spanish"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RubenReyesss/DiabetesHelp-PRO.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RubenReyesss/DiabetesHelp-PRO/issues"
+  },
+  "homepage": "https://github.com/RubenReyesss/DiabetesHelp-PRO",
+  "technologies": {
+    "frontend": "Gradio 4.x",
+    "backend": "Python 3.8+",
+    "llm": "Mistral-7B (OpenRouter)",
+    "rag": "Custom semantic search"
+  },
+  "features": [
+    "Personalized health profiles",
+    "Dynamic menu generation",
+    "Adaptive health plans",
+    "Medical chatbot with context",
+    "Professional medical knowledge base",
+    "RAG system with 7 documents",
+    "Medical calculations (BMI, calories, carbs)",
+    "Week-day adaptive planning"
+  ],
+  "stats": {
+    "lines_of_code": 1179,
+    "medical_documents": 7,
+    "indexed_words": 6300,
+    "rag_chunks": 141,
+    "medical_functions": 5,
+    "ui_tabs": 5,
+    "external_dependencies": 3
+  },
+  "requirements": {
+    "python": ">=3.8",
+    "gradio": ">=4.0.0",
+    "requests": ">=2.31.0",
+    "python-dotenv": ">=1.0.0"
+  }
+}
