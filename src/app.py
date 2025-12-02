@@ -1,6 +1,6 @@
 """
-DiabetesHelp PRO - 100% Generado por LLM (Mistral-7B via OpenRouter)
-Todo es dinámico y personalizado según el perfil del usuario
+DiabetesHelp PRO - Asistente personalizado de diabetes
+Desarrollado por Rubén Reyes | Potenciado por IA
 """
 
 import gradio as gr
@@ -144,7 +144,7 @@ def tab_user_profile(name: str, weight: float, height: float, age: int, sex: str
         
         # Usar LLM para generar presentación personalizada
         prompt = f"""
-Genera un mensaje de bienvenida personalizado y profesional para un paciente con diabetes.
+Genera un análisis de perfil profesional y visualmente bonito para un paciente con diabetes.
 
 DATOS DEL USUARIO:
 - Nombre: {name}
@@ -159,15 +159,27 @@ DATOS DEL USUARIO:
 - TDEE: {cal_info['tdee']} kcal
 - Carbohidratos recomendados: {carb_rec['daily_total']}g
 
-Crea una presentación:
-1. Saludo amable y profesional
-2. Resumen de su perfil de salud actual
-3. Análisis de su IMC y recomendaciones
-4. Recomendaciones calóricas y de carbohidratos
-5. 3 consejos iniciales específicos para su situación
-6. Próximos pasos que debe seguir en la app
+Formatea la respuesta así:
 
-Usa emojis relevantes y formatea bien con símbolos como ╔═══╗."""
+**═══ PERFIL DE SALUD ═══**
+1. Saludo personalizado amable al usuario
+2. Muestra los datos clave formateados profesionalmente
+
+**═══ ANÁLISIS ═══**
+3. Análisis detallado de su IMC
+4. Evaluación de su nivel de actividad
+5. Estado actual con diabetes
+
+**═══ RECOMENDACIONES ═══**
+6. Calorías diarias sugeridas
+7. Ingesta de carbohidratos
+8. 3 consejos específicos y accionables
+
+**═══ PRÓXIMOS PASOS ═══**
+9. Qué hacer en la app
+10. Tips iniciales de uso
+
+Usa emojis, líneas decorativas y formatea bonito para que se vea profesional y atractivo."""
         
         return call_llm(prompt, max_tokens=1500)
     
@@ -430,13 +442,13 @@ def create_interface():
         
         gr.Markdown("""
         # 🏥 DiabetesHelp PRO
-        ## Asistente 100% Generado por IA
+        ## Tu Asistente Personalizado de Diabetes
         
-        **Bienvenido a tu asistente personalizado de diabetes**
+        **Desarrollado por Rubén Reyes**
         
         - 📋 Perfil personalizado
         - 🍽️ Menús dinámicos
-        - 💪 Consejos únicos por IA
+        - 💪 Consejos basados en IA
         - 🤖 Chat inteligente
         
         ⚠️ Sistema educativo. Siempre consulta con tu médico.
@@ -562,12 +574,13 @@ def create_interface():
                 gr.Markdown(f"""
 ## DiabetesHelp PRO
 
-100% generado por IA con **Mistral-7B**
+**Desarrollo:** Rubén Reyes  
+**Tecnología:** Mistral-7B vía OpenRouter + RAG médico
 
-✨ Respuestas únicas cada vez
-✨ Totalmente personalizado
+✨ Respuestas personalizadas y precisas
+✨ Base de conocimiento médico actualizada
 ✨ Seguro y educativo
-✨ Basado en datos médicos profesionales
+✨ Basado en estudios y datos profesionales
 
 **🔑 Configuración**
 - API: {'✅ OK' if OPENROUTER_API_KEY else '❌ No configurada'}
