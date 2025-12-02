@@ -1,6 +1,6 @@
 # 🏥 DiabetesHelp PRO
 
-> **Asistente de diabetes impulsado por IA con generación aumentada de recuperación (RAG) y personalización en tiempo real**
+> **Asistente inteligente para la gestión personalizada de diabetes con búsqueda aumentada y análisis médico profesional**
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Gradio](https://img.shields.io/badge/gradio-4.0+-ff6b6b.svg)](https://gradio.app/)
@@ -8,13 +8,13 @@
 
 ## 🎯 Descripción
 
-**DiabetesHelp PRO** es un asistente médico basado en IA diseñado para proporcionar información, educación y orientación personalizada sobre la gestión de la diabetes. Utiliza el modelo **Mistral-7B** a través de OpenRouter junto con un sistema RAG que integra **7 documentos médicos profesionales** (~6,300 palabras) para garantizar respuestas basadas en evidencia médica.
+**DiabetesHelp PRO** es un asistente médico profesional diseñado para proporcionar información, educación y orientación personalizada sobre la gestión de la diabetes. Integra un sistema RAG con **7 documentos médicos profesionales** (~6,300 palabras) para garantizar respuestas basadas en evidencia médica, utilizando modelos de lenguaje avanzados.
 
 ### ✨ Características Principales
 
 | Característica | Descripción | Tecnología |
 |---|---|---|
-| **100% Generado por IA** | Todas las respuestas son dinámicas y personalizadas | Mistral-7B (OpenRouter) |
+| **Respuestas Dinámicas** | Todas las respuestas son personalizadas según el perfil | Modelos LLM avanzados |
 | **RAG (Retrieval-Augmented Generation)** | Búsqueda semántica en base de datos médica profesional | Sistema RAG personalizado |
 | **Perfil Personalizado** | Análisis completo: IMC, calorías, carbohidratos, diabetes tipo | DiabetesTools + Cálculos médicos |
 | **Plan de Salud Adaptativo** | Plan diario que se ajusta según el día de la semana | Integración de fecha/hora |
@@ -344,9 +344,9 @@ Las contribuciones son bienvenidas. Por favor:
 
 ## 👨‍💻 Autor
 
-**Creado con ❤️ para la comunidad de personas con diabetes**
+**Desarrollado por Rubén Reyes con ❤️ para la comunidad de personas con diabetes**
 
-Contribuciones de documentación médica basadas en:
+Documentación médica basada en:
 - American Diabetes Association (ADA)
 - European Association for the Study of Diabetes (EASD)
 - Organización Mundial de la Salud (OMS)
@@ -360,6 +360,6 @@ Contribuciones de documentación médica basadas en:
 
 <p align="center">
   🏥 <b>DiabetesHelp PRO</b> 🏥<br>
-  Educación sobre diabetes impulsada por IA<br>
+  Sistema profesional de gestión de diabetes<br>
   <i>Siempre bajo supervisión médica profesional</i>
 </p>
