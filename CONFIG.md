@@ -1,103 +1,42 @@
-# Configuración del Proyecto
-
-Este archivo contiene la configuración estándar para el desarrollo local.
+# Configuración
 
 ## Variables de Entorno
 
-Ver `.env.example` para el template. Necesitas:
+Copia `.env.example` a `.env`:
 
 ```env
-# OpenRouter API (requerido)
 OPENROUTER_API_KEY=sk-or-tu-clave-aqui
-
-# Modelo (opcional, default: mistralai/mistral-7b-instruct)
 DIABETES_MODEL=mistralai/mistral-7b-instruct
-
-# Puerto (opcional, default: 7861)
-GRADIO_SERVER_PORT=7861
 ```
 
-## Desarrollo Local
+## Instalación Local
 
-### 1. Crear entorno virtual
 ```bash
+# Entorno virtual
 python -m venv venv
-# Windows
-venv\Scripts\activate
-# macOS/Linux
-source venv/bin/activate
-```
+venv\Scripts\activate  # Windows
 
-### 2. Instalar dependencias
-```bash
+# Instalar dependencias
 pip install -r requirements.txt
-```
 
-### 3. Configurar variables
-```bash
+# Copiar y configurar
 cp .env.example .env
-# Editar .env y agregar API Key
-```
 
-### 4. Ejecutar
-```bash
+# Ejecutar
 python src/app.py
 ```
 
-## Testing
+## Troubleshooting
 
-Para testing futura (preparado en CI/CD):
+**Puerto ocupado:**
 ```bash
-pip install pytest pytest-cov
-pytest
+GRADIO_SERVER_PORT=7862 python src/app.py
 ```
 
-## Estructura de Carpetas
-
-```
-src/              # Código fuente
-rag_documents/    # Documentos médicos
-.github/          # GitHub Actions
-docs/             # Documentación adicional (futuro)
-tests/            # Tests (futuro)
-```
-
-## Debugging
-
-### Activar logs detallados
-En `.env`:
-```env
-DEBUG=True
-LOG_LEVEL=DEBUG
-```
-
-### Problemas comunes
-
-**"Module not found: gradio"**
-```bash
-pip install --upgrade gradio
-```
-
-**"API Key not working"**
-- Verificar .env existe
-- Verificar key es válida en OpenRouter
-- Verificar permisos en GitHub secrets (si usas CI/CD)
-
-**"Port 7861 already in use"**
-```bash
-# Cambiar en .env
-GRADIO_SERVER_PORT=7862
-```
-
-**"RAG not loading"**
+**RAG no carga:**
 - Verificar carpeta `rag_documents/` existe
 - Verificar archivos .md están presentes
-- Ver logs en terminal
 
-## Contribuir
-
-Ver [CONTRIBUTING.md](CONTRIBUTING.md) para guía completa.
-
-## Licencia
-
-MIT - Ver [LICENSE](LICENSE)
+**API Error:**
+- Verificar API Key en .env
+- Verificar credenciales en OpenRouter
