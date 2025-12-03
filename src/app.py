@@ -16,6 +16,19 @@ sys.path.append(os.path.dirname(__file__))
 env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
 load_dotenv(env_path)
 
+# ✅ LANGFUSE INTEGRATION
+try:
+    from langfuse import observe, get_client, propagate_attributes
+    langfuse_client = get_client()
+    LANGFUSE_ENABLED = langfuse_client.auth_check()
+    if LANGFUSE_ENABLED:
+        print("✅ Langfuse conectado correctamente")
+    else:
+        print("⚠️ Langfuse no autenticado - monitoreo deshabilitado")
+except Exception as e:
+    print(f"⚠️ Langfuse no disponible: {e}")
+    LANGFUSE_ENABLED = False
+
 from diabetes_tools import DiabetesTools
 
 # RAG lazy loading - se carga solo cuando se necesita (para inicio rápido)
@@ -50,8 +63,8 @@ def check_api_key():
         return bool(OPENROUTER_API_KEY)
     return False
 
-def call_llm(prompt: str, max_tokens: int = 1000, temperature: float = 0.7, use_rag: bool = False) -> str:
-    """Llama al LLM de OpenRouter con contexto RAG opcional"""
+def call_llm(prompt: str, max_tokens: int = 1000, temperature: float = 0.7, use_rag: bool = False, trace_name: str = "llm_call") -> str:
+    """Llama al LLM de OpenRouter con contexto RAG opcional y tracing con Langfuse"""
     
     if not OPENROUTER_API_KEY:
         return "⚠️ ERROR: OpenRouter API Key no configurada. Ve a README.md"
@@ -59,12 +72,24 @@ def call_llm(prompt: str, max_tokens: int = 1000, temperature: float = 0.7, use_
     try:
         # Agregar contexto RAG si está disponible y solicitado
         rag_context = ""
+        rag_documents_used = []
+        
         if use_rag:
             try:
                 rag_instance = get_rag()
                 if rag_instance:
                     rag_context = rag_instance.get_context(prompt, top_k=2)
                     if rag_context:
+                        # 📊 LOG RAG en Langfuse
+                        if LANGFUSE_ENABLED:
+                            try:
+                                langfuse_client.trace(
+                                    name="rag_retrieval",
+                                    input={"query": prompt, "top_k": 2},
+                                    output={"context_length": len(rag_context), "chunks": rag_context[:200]}
+                                )
+                            except:
+                                pass
                         prompt = rag_context + "\n\n" + prompt
             except:
                 pass  # Si RAG falla, continuar sin él
@@ -102,7 +127,26 @@ Sé específico y personalizado en tus respuestas."""
         
         if response.status_code == 200:
             result = response.json()
-            return result.get("choices", [{}])[0].get("message", {}).get("content", "Error en respuesta")
+            llm_response = result.get("choices", [{}])[0].get("message", {}).get("content", "Error en respuesta")
+            
+            # 📊 LOG LLM en Langfuse
+            if LANGFUSE_ENABLED:
+                try:
+                    langfuse_client.trace(
+                        name=trace_name,
+                        input={
+                            "prompt": prompt[:300],
+                            "model": DIABETES_MODEL,
+                            "temperature": temperature,
+                            "rag_used": use_rag
+                        },
+                        output={"response": llm_response[:300]},
+                        metadata={"tokens": max_tokens}
+                    )
+                except:
+                    pass
+            
+            return llm_response
         else:
             error_detail = response.json() if response.headers.get('content-type') == 'application/json' else response.text
             return f"❌ Error API ({response.status_code}): {str(error_detail)[:300]}"
@@ -137,10 +181,35 @@ def tab_user_profile(name: str, weight: float, height: float, age: int, sex: str
             "activity_level": activity_level
         }
         
-        # Calcular datos básicos
+        # 📊 Calcular datos con TOOLS y loguear en Langfuse
         bmi_info = DiabetesTools.calculate_bmi(weight, height)
         cal_info = DiabetesTools.estimate_daily_caloric_needs(weight, height, age, sex_clean, activity_level)
         carb_rec = DiabetesTools.carbohydrate_intake_recommendation(diabetes_type, weight, activity_level)
+        
+        # LOG TOOLS en Langfuse
+        if LANGFUSE_ENABLED:
+            try:
+                langfuse_client.trace(
+                    name="diabetes_tools_calculation",
+                    input={
+                        "weight_kg": weight,
+                        "height_cm": height,
+                        "age": age,
+                        "sex": sex_clean,
+                        "diabetes_type": diabetes_type,
+                        "activity_level": activity_level
+                    },
+                    output={
+                        "bmi": bmi_info['bmi'],
+                        "bmi_category": bmi_info['category'],
+                        "bmr": cal_info['bmr'],
+                        "tdee": cal_info['tdee'],
+                        "daily_carbs": carb_rec['daily_total']
+                    },
+                    metadata={"tools_used": ["calculate_bmi", "estimate_daily_caloric_needs", "carbohydrate_intake_recommendation"]}
+                )
+            except:
+                pass
         
         # Usar LLM para generar presentación personalizada
         prompt = f"""
@@ -611,6 +680,6 @@ if __name__ == "__main__":
     interface.launch(
         share=False,
         server_name="127.0.0.1",
-        server_port=7861,
+        server_port=7862,
         show_error=True
     )

@@ -141,11 +141,66 @@ La aplicación se abrirá en: **http://127.0.0.1:7861**
 - **OpenRouter API** - Proveedor de LLM con múltiples modelos
 - **RAG System** - Sistema personalizado de recuperación aumentada
 - **python-dotenv** - Gestión de variables de entorno
+- **Langfuse** (Opcional) - Observabilidad de LLM, RAG y tools
 
 ### Componentes Médicos
 - **DiabetesTools** - Cálculos médicos (IMC, calorías, carbohidratos)
 - **Ecuación Mifflin-St Jeor** - Estimación de necesidades calóricas
 - **Documentos médicos profesionales** - ADA, EASD, literatura médica
+
+## 📊 Monitoreo con Langfuse (Opcional)
+
+**Langfuse** es una plataforma de observabilidad para agentes IA que permite monitorear:
+
+- 🔍 **Llamadas al LLM** - Prompts, respuestas, latencia, tokens
+- 📚 **Recuperación RAG** - Documentos utilizados, chunks indexados, relevancia
+- 🔧 **Uso de Tools** - Herramientas médicas (IMC, calorías, carbohidratos), inputs/outputs
+- 📈 **Costos y Rendimiento** - Análisis de gastos, latencias, éxito/error
+
+### Configurar Langfuse
+
+1. **Crear cuenta en Langfuse** (gratis)
+   - Ve a https://cloud.langfuse.com/
+   - Regístrate y crea un proyecto
+
+2. **Obtener credenciales**
+   - En Settings → API Keys
+   - Copia `Public Key` y `Secret Key`
+
+3. **Configurar en `.env`**
+```bash
+LANGFUSE_PUBLIC_KEY=pk-lf-...
+LANGFUSE_SECRET_KEY=sk-lf-...
+LANGFUSE_BASE_URL=https://cloud.langfuse.com
+```
+
+4. **Ejecutar la app**
+```bash
+python src/app.py
+```
+
+5. **Ver trazas en Langfuse**
+   - Cada llamada al LLM, RAG y tools aparecerá en tu dashboard
+   - Analiza latencia, costos, errores y patrones de uso
+
+### Ejemplo de Observabilidad
+
+Cuando usas la app, Langfuse captura:
+
+```
+📝 Trace: tab_user_profile
+├── 🔧 diabetes_tools_calculation
+│   ├── Input: weight, height, age, sex, diabetes_type, activity_level
+│   └── Output: BMI, BMR, TDEE, daily_carbs
+├── 📚 rag_retrieval
+│   ├── Query: consulta del usuario
+│   ├── Documents: 2 chunks relevantes de base médica
+│   └── Context length: ~500 caracteres
+└── 🤖 llm_call
+    ├── Model: mistralai/mistral-7b-instruct
+    ├── Prompt: consulta + contexto RAG
+    └── Response: análisis personalizado
+```
 
 ## 🔧 Configuración
 

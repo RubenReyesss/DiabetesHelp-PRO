@@ -9,3 +9,8 @@ requests>=2.31.0
 
 # Variables de entorno
 python-dotenv>=1.0.0
+
+# Monitoreo y observabilidad (Opcional)
+langfuse>=2.0.0
+opentelemetry-api>=1.20.0
+opentelemetry-sdk>=1.20.0
