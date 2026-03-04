@@ -58,16 +58,14 @@ DIABETES_MODEL = os.getenv("DIABETES_MODEL", "mistralai/mistral-7b-instruct").st
 user_data = {}
 
 def check_api_key():
-    """Verifica si hay API key configurada"""
-    if not OPENROUTER_API_KEY or OPENROUTER_API_KEY.startswith("sk-"):
-        return bool(OPENROUTER_API_KEY)
-    return False
+    """Verifica si hay API key configurada con formato correcto (sk-...)"""
+    return bool(OPENROUTER_API_KEY) and OPENROUTER_API_KEY.startswith("sk-")
 
 def call_llm(prompt: str, max_tokens: int = 1000, temperature: float = 0.7, use_rag: bool = False, trace_name: str = "llm_call") -> str:
     """Llama al LLM de OpenRouter con contexto RAG opcional y tracing con Langfuse"""
     
-    if not OPENROUTER_API_KEY:
-        return "⚠️ ERROR: OpenRouter API Key no configurada. Ve a README.md"
+    if not check_api_key():
+        return "⚠️ ERROR: OpenRouter API Key no configurada o inválida. Ve a README.md"
     
     try:
         # Agregar contexto RAG si está disponible y solicitado
